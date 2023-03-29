@@ -4,119 +4,145 @@
 
 //#define CATCH_CONFIG_MAIN // defines main() automatically
 #include "lib/catch.hpp"
-#include "sudoku.hpp"
+#include "maze.hpp"
 #include <string.h>
 
 
 // =====================
-// Sudoku Testcases
+// Maze Testcases
 // ---------------------
 
-TEST_CASE("Test1", "Sudoku")
+TEST_CASE("Test1", "Maze")
 {
     int result = 0;
-    int actual[SIZE][SIZE];
-    int initial[SIZE][SIZE] = {
-        {0, 1, 0, 0, 0, 9, 0, 5, 0},
-        {0, 9, 0, 0, 0, 0, 4, 8, 0},
-        {0, 6, 0, 1, 0, 4, 0, 0, 0},
-        {0, 0, 5, 0, 0, 0, 9, 3, 0},
-        {0, 0, 0, 7, 0, 2, 0, 0, 0},
-        {0, 2, 1, 0, 0, 0, 8, 0, 0},
-        {4, 0, 0, 0, 8, 0, 6, 0, 9},
-        {0, 0, 0, 0, 6, 0, 5, 0, 3},
-        {2, 0, 0, 0, 3, 0, 0, 0, 0},
+    char maze[ROWS][COLS] = {
+        {'#','#','#','#','#','#','#','#','#','#'},
+        {'#','S','#',' ','#',' ','#',' ',' ','#'},
+        {'#',' ','#',' ','#',' ','#','#',' ','#'},
+        {'#',' ','#',' ','#',' ',' ',' ',' ','#'},
+        {'#','#',' ',' ','#',' ','#',' ',' ','#'},
+        {'#',' ','#','#','#',' ','#','#',' ','#'},
+        {'#',' ',' ',' ','#',' ',' ','#',' ','#'},
+        {'#','#','#',' ','#','#',' ','#',' ','#'},
+        {'#',' ',' ',' ',' ',' ',' ','#','T','#'},
+        {'#','#','#','#','#','#','#','#','#','#'}
     };
-    int expected[SIZE][SIZE] = {
-        {3, 1, 4, 8, 2, 9, 7, 5, 0},
-        {0, 9, 0, 0, 0, 0, 4, 8, 0},
-        {0, 6, 0, 1, 0, 4, 0, 0, 0},
-        {0, 0, 5, 0, 0, 0, 9, 3, 0},
-        {0, 0, 0, 7, 0, 2, 0, 0, 0},
-        {0, 2, 1, 0, 0, 0, 8, 0, 0},
-        {4, 0, 0, 0, 8, 0, 6, 0, 9},
-        {0, 0, 0, 0, 6, 0, 5, 0, 3},
-        {2, 0, 0, 0, 3, 0, 0, 0, 0},
+    char expected[ROWS][COLS] = {
+        {'#','#','#','#','#','#','#','#','#','#'},
+        {'#','x','#',' ','#',' ','#',' ',' ','#'},
+        {'#','x','#',' ','#',' ','#','#',' ','#'},
+        {'#','x','#',' ','#',' ',' ',' ',' ','#'},
+        {'#','#',' ',' ','#',' ','#',' ',' ','#'},
+        {'#',' ','#','#','#',' ','#','#',' ','#'},
+        {'#',' ',' ',' ','#',' ',' ','#',' ','#'},
+        {'#','#','#',' ','#','#',' ','#',' ','#'},
+        {'#',' ',' ',' ',' ',' ',' ','#','T','#'},
+        {'#','#','#','#','#','#','#','#','#','#'}
     };
-    init(initial);
-    result = solve(0,0);
-    getResult(actual);
-    if(memcmp(actual, expected, sizeof(initial)) == 0){
-        INFO("Solution helper: if your Sudoku Solver gets 'stuck' in the first row, consider using the remove function at some point in your algorithm.");
-        REQUIRE(memcmp(actual, expected, sizeof(initial)) != 0);
-    }
-    INFO("Test Case: solve hasn't found a solution yet.");
+    init(maze);
+    printf("========= Maze Test Case 1 ==========\n");
+    print();
+    result = escape(1,1);
+    getResult(maze);
+    INFO("Testing the above maze without an exit to the labyrinth. Check if you produce the required symbols. ");
+    REQUIRE(memcmp(maze, expected, sizeof(maze)) == 0);
+    INFO("Test Case: return value should be 0 (no escape).");
+    REQUIRE(result==0);
+}
+
+TEST_CASE("Test2", "Maze")
+{
+    int result = 0;
+    char maze[ROWS][COLS] = {
+        {'#','#','#','#','#','#','#','#','#','#'},
+        {'#','S','#',' ','#',' ','#',' ',' ','#'},
+        {'#',' ','#',' ','#',' ','#','#',' ','#'},
+        {'#',' ','#',' ','#',' ',' ',' ',' ','#'},
+        {'#',' ',' ',' ','#',' ','#',' ',' ','#'},
+        {'#',' ','#','#','#',' ','#','#',' ','#'},
+        {'#',' ',' ',' ','#',' ',' ','#',' ','#'},
+        {'#','#','#',' ','#','#',' ','#',' ','#'},
+        {'#',' ',' ',' ',' ',' ',' ','#','T','#'},
+        {'#','#','#','#','#','#','#','#','#','#'}
+    };
+    init(maze);
+    printf("========= Maze Test Case 2 ==========\n");
+    print();
+    result = escape(1,1);
+    getResult(maze);
+    INFO("Testing the above maze with an exit reachable. Check if you produce the required symbols. ");
+    REQUIRE(maze[8][8]=='S');
+    REQUIRE(maze[7][8]=='.');
+    REQUIRE(maze[6][8]=='.');
+    REQUIRE(maze[8][3]=='.');
+    REQUIRE(maze[1][1]=='.');
+    INFO("Test Case: return value should be 1 (escape exists).");
     REQUIRE(result==1);
 }
 
-
-TEST_CASE("Test2", "Sudoku")
+TEST_CASE("Test3", "Maze")
 {
     int result = 0;
-    int actual[SIZE][SIZE];
-    int initial[SIZE][SIZE] = {
-        {0, 1, 0, 0, 0, 9, 0, 5, 0},
-        {0, 9, 0, 0, 0, 0, 4, 8, 0},
-        {0, 6, 0, 1, 0, 4, 0, 0, 0},
-        {0, 0, 5, 0, 0, 0, 9, 3, 0},
-        {0, 0, 0, 7, 0, 2, 0, 0, 0},
-        {0, 2, 1, 0, 0, 0, 8, 0, 0},
-        {4, 0, 0, 0, 8, 0, 6, 0, 9},
-        {0, 0, 0, 0, 6, 0, 5, 0, 3},
-        {2, 0, 0, 0, 3, 0, 0, 0, 0},
+    char maze[ROWS][COLS] = {
+        {'#','#','#','#','#','#','#','#','#','#'},
+        {'#','S','#',' ','#',' ','#',' ',' ','#'},
+        {'#',' ','#',' ','#',' ','#','#',' ','#'},
+        {'#',' ','#',' ','#',' ',' ',' ',' ','#'},
+        {'#',' ',' ',' ','#',' ','#',' ',' ','#'},
+        {'#',' ','#','#','#',' ','#','#',' ','#'},
+        {'#',' ',' ',' ','#',' ',' ','#',' ','#'},
+        {'#','#','#',' ','#','#',' ','#','#','#'},
+        {'#',' ',' ',' ',' ',' ',' ','#','T','#'},
+        {'#','#','#','#','#','#','#','#','#','#'}
     };
-    int expected[SIZE][SIZE] = {
-        {3, 1, 4, 8, 7, 9, 2, 5, 6},
-        {5, 9, 7, 3, 2, 6, 4, 8, 1},
-        {8, 6, 2, 1, 5, 4, 3, 9, 7},
-        {7, 4, 5, 6, 1, 8, 9, 3, 2},
-        {9, 3, 8, 7, 4, 2, 1, 6, 5},
-        {6, 2, 1, 5, 9, 3, 8, 7, 4},
-        {4, 7, 3, 2, 8, 5, 6, 1, 9},
-        {1, 8, 9, 4, 6, 7, 5, 2, 3},
-        {2, 5, 6, 9, 3, 1, 7, 4, 8},
+    char expected[ROWS][COLS] = {
+        {'#','#','#','#','#','#','#','#','#','#'},
+        {'#','x','#','x','#','x','#','x','x','#'},
+        {'#','x','#','x','#','x','#','#','x','#'},
+        {'#','x','#','x','#','x','x','x','x','#'},
+        {'#','x','x','x','#','x','#','x','x','#'},
+        {'#','x','#','#','#','x','#','#','x','#'},
+        {'#','x','x','x','#','x','x','#','x','#'},
+        {'#','#','#','x','#','#','x','#','#','#'},
+        {'#','x','x','x','x','x','x','#','T','#'},
+        {'#','#','#','#','#','#','#','#','#','#'}
     };
-    init(initial);
-    result = solve(0,0);
-    getResult(actual);
-    INFO("Test Case: valid Sudoku board failed.");
-    REQUIRE(memcmp(actual, expected, sizeof(initial)) == 0);
-    INFO("Test Case: return value not correct.");
-    REQUIRE(result == 1);
+    init(maze);
+    printf("========= Maze Test Case 3 ==========\n");
+    print();
+    result = escape(1,1);
+    getResult(maze);
+    INFO("Testing the above maze without an exit to the labyrinth. Check if you produce the required symbols. ");
+    REQUIRE(memcmp(maze, expected, sizeof(maze)) == 0);
+    INFO("Test Case: return value should be 0 (no escape).");
+    REQUIRE(result==0);
 }
 
-
-TEST_CASE("Test3", "Sudoku")
+TEST_CASE("Test4", "Maze")
 {
     int result = 0;
-    int actual[SIZE][SIZE];
-    int initial[SIZE][SIZE] = {
-        {0, 1, 0, 0, 0, 9, 0, 5, 0},
-        {0, 9, 0, 0, 0, 0, 4, 8, 0},
-        {0, 6, 0, 1, 0, 4, 0, 0, 0},
-        {0, 0, 5, 0, 0, 0, 9, 3, 0},
-        {0, 0, 0, 7, 0, 2, 0, 0, 0},
-        {0, 2, 1, 0, 0, 0, 8, 0, 0},
-        {4, 0, 0, 0, 8, 6, 6, 0, 9},
-        {0, 0, 0, 0, 6, 0, 5, 0, 3},
-        {2, 0, 0, 0, 3, 0, 0, 0, 0},
+    char maze[ROWS][COLS] = {
+        {'#','#','#','#','#','#','#','#','#','#'},
+        {'#','S','#','T','#',' ','#',' ',' ','#'},
+        {'#',' ','#',' ','#',' ','#','#',' ','#'},
+        {'#',' ','#',' ','#',' ',' ',' ',' ','#'},
+        {'#',' ',' ',' ','#',' ','#',' ',' ','#'},
+        {'#',' ','#','#','#',' ','#','#',' ','#'},
+        {'#',' ',' ',' ','#',' ',' ','#',' ','#'},
+        {'#','#','#',' ','#','#',' ','#',' ','#'},
+        {'#',' ',' ',' ',' ',' ',' ','#',' ','#'},
+        {'#','#','#','#','#','#','#','#','#','#'}
     };
-    int expected[SIZE][SIZE] = {
-        {0, 1, 0, 0, 0, 9, 0, 5, 0},
-        {0, 9, 0, 0, 0, 0, 4, 8, 0},
-        {0, 6, 0, 1, 0, 4, 0, 0, 0},
-        {0, 0, 5, 0, 0, 0, 9, 3, 0},
-        {0, 0, 0, 7, 0, 2, 0, 0, 0},
-        {0, 2, 1, 0, 0, 0, 8, 0, 0},
-        {4, 0, 0, 0, 8, 6, 6, 0, 9},
-        {0, 0, 0, 0, 6, 0, 5, 0, 3},
-        {2, 0, 0, 0, 3, 0, 0, 0, 0},
-    };
-    init(initial);
-    result = solve(0,0);
-    getResult(actual);
-    INFO("Test Case: invalid Sudoku board failed.");
-    REQUIRE(memcmp(actual, expected, sizeof(initial)) == 0);
-    INFO("Test Case: return value not correct.");
-    REQUIRE(result == 0);
+    init(maze);
+    printf("========= Maze Test Case 4 ==========\n");
+    print();
+    result = escape(1,1);
+    getResult(maze);
+    INFO("Testing the above maze with an exit reachable. Check if you produce the required symbols. ");
+    REQUIRE(maze[1][3]=='S');
+    REQUIRE(maze[2][1]=='.');
+    REQUIRE(maze[1][1]=='.');
+    REQUIRE(maze[3][1]=='.');
+    INFO("Test Case: return value should be 1 (escape exists).");
+    REQUIRE(result==1);
 }

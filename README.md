@@ -14,14 +14,14 @@ See Moodle course and source code TODO instructions for details.
 
 ## Instructions
 
-- You can ONLY change files `main.cpp` & `sudoku.cpp`!
+- You can ONLY change files `main.cpp` & `maze.cpp`!
    * Your implementation should be in C programming language, only.
 
 Explanations for the other files:
 
 - file `tests.cpp` has all tests for the activity (DO NOT CHANGE!)
 - file `catch.hpp` has the testing library  CATCH2 (DO NOT CHANGE!)
-- file `sudoku.hpp` contains the prototype definitions for `sudoku.cpp` (DO NOT CHANGE!)
+- file `maze.hpp` contains the prototype definitions for `sudoku.cpp` (DO NOT CHANGE!)
 - file `makefile` has the commands for executing activity (DO NOT CHANGE!)
 - file  `exercise3` will be generated after compiling (if you want to test locally, just execute it)
 

@@ -5,8 +5,8 @@
 CXX=g++
 CPPFLAGS=--std=c++17
 
-DEPS=sudoku.hpp lib/catch.hpp
-OBJ=main.o sudoku.o tests.o
+DEPS=maze.hpp lib/catch.hpp
+OBJ=main.o maze.o tests.o
 
 all: clean test
 
